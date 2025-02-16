@@ -6,10 +6,18 @@ import authRouter from './routes/auth.route.js'
 import bloodReqRouter from './routes/reqBlood.route.js'
 import donorRouter from './routes/donor.route.js'
 import { verifyJWT } from './middleware/auth.middleware.js'
+import cors from 'cors'
 
 dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
+
+app.use(cors({
+    origin:["http://localhost:5173","http://127.0.0.1:5500"],
+    methods: "GET,POST,PATCH,PUT,DELETE",
+    allowedHeaders: ["Content-Type"],
+    credentials:true
+}))
 
 app.use(express.json())
 app.use(cookieParser())
