@@ -14,6 +14,7 @@ export const signupController = async (req, res)=>{
     res.cookie('jwt',token,{httpOnly:true,maxAge:30*24*60*60*1000, secure:true, sameSite:"None"})
     res.status(201).json(user)
 }
+
 export const loginController = async (req, res)=>{
     const {email, password} = req.body 
     if(!email || !password) return res.status(400).json({message:"please fill required fields"})
@@ -53,3 +54,13 @@ export const logoutController = async (req, res)=>{
     res.status(204).json({message:"user logout successfully"})
 } 
 
+export const getUserProfile = async(req, res)=>{
+    const {_id:userId} = req.user;
+
+    if(!userId) return res.status(401).json({message:"unauthorized user"})
+
+    const user = await User.findOne({_id:userId})
+    if(!user) return res.status(403).json({message:"forbidden"})
+
+    res.status(200).json(user)
+}
