@@ -11,7 +11,7 @@ export const signupController = async (req, res)=>{
     const token = user.createJWT() 
     user.token = token
 
-    res.cookie('jwt',token,{httpOnly:true,maxAge:30*24*60*60*1000, secure:true, sameSite:"Strict"})
+    res.cookie('jwt',token,{httpOnly:true,maxAge:30*24*60*60*1000, secure:true, sameSite:"None"})
     res.status(201).json(user)
 }
 export const loginController = async (req, res)=>{
@@ -27,7 +27,7 @@ export const loginController = async (req, res)=>{
     const token = user.createJWT()
     user.token = token
 
-    res.cookie('jwt',token,{httpOnly:true,maxAge:30*24*60*60*1000, secure:true, sameSite:"Strict"})
+    res.cookie('jwt',token,{httpOnly:true,maxAge:30*24*60*60*1000, secure:true, sameSite:"None"})
     res.status(200).json(user)
 }
 
@@ -49,7 +49,7 @@ export const logoutController = async (req, res)=>{
     if(!user) return res.status(404).json({message:"user not found"}) 
     user.token = ""
 
-    res.clearCookie('jwt','',{httpOnly:true, secure:true, sameSite:"Strict"})
+    res.clearCookie('jwt','',{httpOnly:true, secure:true, sameSite:"None"})
     res.status(204).json({message:"user logout successfully"})
 } 
 
