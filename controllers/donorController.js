@@ -6,6 +6,7 @@ export const getAllDonars = async(req, res)=>{
 
     if(!userId) return res.status(401).json({message:"unauthorized user"})
 
+        
     const donors = await Donor.find({donorId :{$ne: userId, $exists: true},available:true})
     
     if(!donors) return res.status(200).json()

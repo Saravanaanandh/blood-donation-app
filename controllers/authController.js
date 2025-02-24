@@ -1,3 +1,4 @@
+import cloudinary from '../config/cloudinary.js'
 import User from './../model/User.js'
 
 export const signupController = async (req, res)=>{
@@ -34,13 +35,21 @@ export const loginController = async (req, res)=>{
 
 export const updateProfileController = async (req, res)=>{
     const {location, available, profile, banner, tattooIn12, pinCode, mobile, positiveHIVTest,weight} = req.body
-
+    
     const user = req.user
     if(!user) return res.status(401).json({message:"unauthorized User"})
-
-    const updatedUser = await User.findOneAndUpdate({email:user.email},{location, available, profile, banner, tattooIn12, pinCode, mobile, positiveHIVTest,weight},{new:true,runValidators:true})
-
-    res.status(200).json(updatedUser)
+    let updatedUser = await User.findOneAndUpdate({email:user.email},{location, available, tattooIn12, pinCode, mobile, positiveHIVTest,weight},{new:true,runValidators:true})
+        
+    if(profile){
+        const uploadedResponse = await cloudinary.uploader.upload(profile)
+        updatedUser = await User.findOneAndUpdate({email:user.email},{profile:uploadedResponse.secure_url},{new:true})
+    }
+    if(banner){
+        const uploadedResponse = await cloudinary.uploader.upload(banner)
+        updatedUser = await User.findOneAndUpdate({email:user.email},{profile:uploadedResponse.secure_url},{new:true})
+    } 
+    const newUser = updatedUser 
+    res.status(200).json(newUser)
 }
 
 export const logoutController = async (req, res)=>{
