@@ -42,11 +42,11 @@ export const updateProfileController = async (req, res)=>{
         
     if(profile){
         const uploadedResponse = await cloudinary.uploader.upload(profile)
-        updatedUser = await User.findOneAndUpdate({email:user.email},{profile:uploadedResponse.secure_url},{new:true})
+        updatedUser = await User.findOneAndUpdate({email:user.email},{profile:uploadedResponse.secure_url},{new:true,runValidators:true})
     }
     if(banner){
         const uploadedResponse = await cloudinary.uploader.upload(banner)
-        updatedUser = await User.findOneAndUpdate({email:user.email},{profile:uploadedResponse.secure_url},{new:true})
+        updatedUser = await User.findOneAndUpdate({email:user.email},{banner:uploadedResponse.secure_url},{new:true,runValidators:true})
     } 
     const newUser = updatedUser 
     res.status(200).json(newUser)
